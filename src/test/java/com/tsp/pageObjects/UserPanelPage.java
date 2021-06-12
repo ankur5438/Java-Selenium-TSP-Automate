@@ -119,7 +119,7 @@ public class UserPanelPage {
 	WebElement babbeteRole;
 	
 	//HOURLY RATE CORRESPOND TO BABBETE
-	@FindBy (xpath = "//td[contains(text(),'Babette H')]/following-sibling::td[2]/div/input")
+	@FindBy (xpath = "//td[contains(text(),'Babette H')]/following-sibling::td[2]")
 	private
 	WebElement babbeteHourly;
 	
@@ -393,5 +393,88 @@ public boolean searching() throws InterruptedException
 	return (sortedListNames.equals(originalListNames) && sortedListRoles.equals(originalListRoles));
 
 }
+
+	
+
+//EDIT BABBETE USER
+
+public boolean editUser() {
+	
+	wait.until(ExpectedConditions.elementToBeClickable(checkboxBabbete));
+	checkboxBabbete.click();
+	editButton.click();
+	wait.until(ExpectedConditions.visibilityOf(editSelectRole));
+	
+	Select editRole = new Select(editSelectRole);
+	
+	ArrayList <String> editItems = new ArrayList <String>();
+	editItems.add("No Access");
+	editItems.add("2");
+	editItems.add("4");
+	if(editOnSiteRate.isEnabled()) {System.out.println("Hourly Rate enabled");}
+	if(editOnSiteRate.isEnabled()) {System.out.println("Onsite Rate enabled");}
+	wait.until(ExpectedConditions.visibilityOf(editHourlyRate));
+	wait.until(ExpectedConditions.visibilityOf(editOnSiteRate));
+	
+	//JavascriptExecutor js = (JavascriptExecutor) driver;
+	//js.executeScript("arguments[0].value = '';", p.editHourlyRate);
+	
+	if(wait.until(ExpectedConditions.attributeToBeNotEmpty(editOnSiteRate, "value")) && wait.until(ExpectedConditions.attributeToBeNotEmpty(editHourlyRate, "value"))) 
+	{
+	onSiteRate.clear();
+	hourlyRate.clear();
+	}
+	if(wait.until(ExpectedConditions.not(ExpectedConditions.attributeToBeNotEmpty(editOnSiteRate, "value"))) && wait.until(ExpectedConditions.not(ExpectedConditions.attributeToBeNotEmpty(editHourlyRate, "value")))) 
+	{
+	editRole.selectByVisibleText(editItems.get(0));	
+	editHourlyRate.sendKeys(editItems.get(1));
+	editOnSiteRate.sendKeys(editItems.get(2));
+	driver.findElement(By.xpath("//body[1]/div[4]/div[1]/div[1]/div[2]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/button[1]")).click();
+	}
+	
+	
+	
+	
+	
+	
+	ArrayList <String> actualEdit = new ArrayList <String>();
+	if (wait.until(ExpectedConditions.textToBePresentInElement(babbeteRole, "No Access"))) {
+	actualEdit.add(babbeteRole.getText());
+	actualEdit.add(babbeteHourly.getText());
+	
+	editItems.remove(2);
+	
+	System.out.println("Expected : " + editItems);
+	System.out.println("Actual : " + actualEdit);
+	
+	
+	
+	
+	/*
+	 
+	 
+	if (editItems.equals(actualEdit)) {
+		
+		System.out.println("!--------Test is Passed for Edit--------!");
+	}
+	
+	else {
+		
+		System.out.println("!--------Test is Failed for Edit--------!");
+		File src = ts.getScreenshotAs(OutputType.FILE);
+		File trg = new File(".\\Screenshots\\UserEditFail.png");
+		FileUtils.copyFile(src,trg);
+	}
+	
+	
+	*/
+	}
+	return (editItems.equals(actualEdit));
+	
+	
+	
+}
+
+	
 
 }
