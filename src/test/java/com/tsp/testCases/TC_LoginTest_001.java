@@ -76,6 +76,15 @@ public void search() throws InterruptedException
 }
 
 
+@Test (priority = 6)
+public void editUser() 
+{
+	UserPanelPage up = new UserPanelPage(driver);
+	boolean result = up.editUser();
+	Assert.assertTrue(result);
+}
+
+
 
 
 
